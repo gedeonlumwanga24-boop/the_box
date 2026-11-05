@@ -1,0 +1,374 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              Int       @id @default(autoincrement())
+  name            String
+  email           String    @unique
+  emailVerifiedAt DateTime? @map("email_verified_at")
+  password        String?
+  role            String    @default("client")
+  rememberToken   String?   @map("remember_token")
+  googleId        String?   @unique @map("google_id")
+  avatar          String?
+  deletedAt       DateTime? @map("deleted_at")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  client   Client?
+  orders   Order[]
+  carts    Cart[]
+  messages Message[]
+
+  @@map("users")
+}
+
+model Client {
+  id        Int       @id @default(autoincrement())
+  userId    Int       @unique @map("user_id")
+  telephone String?
+  adresse   String?
+  ville     String?
+  deletedAt DateTime? @map("deleted_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("clients")
+}
+
+model Category {
+  id           Int      @id @default(autoincrement())
+  parentId     Int?     @map("parent_id")
+  name         String   @map("nom")
+  slug         String   @unique
+  displayOrder Int      @default(0) @map("display_order")
+  image        String?
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  parent   Category?  @relation("CategoryTree", fields: [parentId], references: [id], onDelete: SetNull)
+  children Category[] @relation("CategoryTree")
+  products Product[]
+
+  @@map("categories")
+}
+
+model Product {
+  id          Int       @id @default(autoincrement())
+  name        String    @map("nom")
+  slug        String    @unique
+  description String?
+  price       Float
+  stock       Int       @default(0)
+  image       String?
+  gallery     Json?     @map("galerie")
+  categoryId  Int       @map("category_id")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  category   Category    @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  orderItems OrderItem[]
+  cartItems  CartItem[]
+
+  @@map("produits")
+}
+
+model Order {
+  id                  Int       @id @default(autoincrement())
+  userId              Int?      @map("user_id")
+  total               Float
+  statut              String    @default("pending")
+  adresse             String?
+  paymentMethod       String?   @map("payment_method")
+  paymentPhone        String?   @map("payment_phone")
+  paymentReference    String?   @map("payment_reference")
+  paymentProof        String?   @map("payment_proof")
+  paymentStatus       String    @default("pending") @map("payment_status")
+  pawapayDepositId    String?   @map("pawapay_deposit_id")
+  mobileMoneyProvider String?   @map("mobile_money_provider")
+  mobileMoneyNumber   String?   @map("mobile_money_number")
+  createdAt           DateTime  @default(now()) @map("created_at")
+  updatedAt           DateTime  @updatedAt @map("updated_at")
+
+  user  User?      @relation(fields: [userId], references: [id], onDelete: SetNull)
+  items OrderItem[]
+
+  @@map("commandes")
+}
+
+model OrderItem {
+  id        Int      @id @default(autoincrement())
+  orderId   Int      @map("commande_id")
+  productId Int      @map("produit_id")
+  quantity  Int      @map("quantite")
+  unitPrice Float    @map("prix_unitaire")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Restrict)
+
+  @@unique([orderId, productId])
+  @@map("commande_produit")
+}
+
+model Message {
+  id             Int       @id @default(autoincrement())
+  isAdmin        Boolean?  @default(false) @map("is_admin")
+  name           String?   @map("nom")
+  email          String?
+  subject        String?   @map("sujet")
+  message        String?
+  statut         String?   @default("pending")
+  status         String?   @default("pending")
+  adminNotes     String?   @map("admin_notes")
+  readAt         DateTime? @map("read_at")
+  adminResponse  String?   @map("admin_response")
+  respondedAt    DateTime? @map("responded_at")
+  responseReadAt DateTime? @map("response_read_at")
+  reply          String?
+  clientRead     DateTime? @map("client_read")
+  userId         Int?      @map("user_id")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@map("messages")
+}
+
+model Cart {
+  id        Int      @id @default(autoincrement())
+  userId    Int?     @map("user_id")
+  sessionId String?  @map("session_id")
+  total     Float    @default(0)
+  status    String   @default("active")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user  User?      @relation(fields: [userId], references: [id], onDelete: SetNull)
+  items CartItem[]
+
+  @@map("paniers")
+}
+
+model CartItem {
+  id        Int      @id @default(autoincrement())
+  cartId    Int      @map("panier_id")
+  productId Int      @map("produit_id")
+  quantity  Int      @map("quantite")
+  unitPrice Float    @map("prix_unitaire")
+  size      String?  @map("taille")
+  color     String?  @map("couleur")
+  notes     String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  cart    Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Restrict)
+
+  @@unique([cartId, productId, size])
+  @@index([cartId, productId])
+  @@map("panier_items")
+}
+
+model SiteConfig {
+  id        Int      @id @default(autoincrement())
+  key       String   @unique
+  value     String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("site_configs")
+}
+
+model ErrorLog {
+  id         Int      @id @default(autoincrement())
+  message    String
+  stackTrace String?  @map("stack_trace")
+  url        String?
+  method     String?
+  ipAddress  String?  @map("ip_address")
+  status     String?
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@map("error_logs")
+}
+
+model Notification {
+  id             String    @id @default(cuid())
+  type           String
+  notifiableType String    @map("notifiable_type")
+  notifiableId   Int       @map("notifiable_id")
+  data           Json
+  readAt         DateTime? @map("read_at")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  @@map("notifications")
+}
+
+model Permission {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  guardName String   @default("web") @map("guard_name")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  rolePermissions RoleHasPermission[]
+  modelPermissions ModelHasPermission[]
+
+  @@map("permissions")
+}
+
+model Role {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  guardName String   @default("web") @map("guard_name")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  rolePermissions RoleHasPermission[]
+  modelRoles      ModelHasRole[]
+
+  @@map("roles")
+}
+
+model ModelHasPermission {
+  permissionId Int    @map("permission_id")
+  modelType    String @map("model_type")
+  modelId      Int    @map("model_id")
+
+  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([permissionId, modelId, modelType])
+  @@map("model_has_permissions")
+}
+
+model ModelHasRole {
+  roleId    Int    @map("role_id")
+  modelType String @map("model_type")
+  modelId   Int    @map("model_id")
+
+  role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, modelId, modelType])
+  @@map("model_has_roles")
+}
+
+model RoleHasPermission {
+  permissionId Int @map("permission_id")
+  roleId      Int @map("role_id")
+
+  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@id([permissionId, roleId])
+  @@map("role_has_permissions")
+}
+
+model PersonalAccessToken {
+  id            Int       @id @default(autoincrement())
+  tokenableType String    @map("tokenable_type")
+  tokenableId   Int       @map("tokenable_id")
+  name          String
+  token         String    @unique
+  abilities      String?
+  lastUsedAt    DateTime? @map("last_used_at")
+  expiresAt     DateTime? @map("expires_at")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  @@map("personal_access_tokens")
+}
+
+model CacheEntry {
+  key        String  @id
+  value      String
+  expiration Int?
+
+  @@map("cache")
+}
+
+model CacheLock {
+  key        String @id
+  owner      String
+  expiration Int
+
+  @@map("cache_locks")
+}
+
+model Job {
+  id          Int      @id @default(autoincrement())
+  queue       String
+  payload     String
+  attempts    Int      @default(0)
+  reservedAt  Int?     @map("reserved_at")
+  availableAt Int      @map("available_at")
+  createdAt   Int      @map("created_at")
+
+  @@map("jobs")
+}
+
+model JobBatch {
+  id          String  @id
+  name        String?
+  totalJobs   Int     @map("total_jobs")
+  pendingJobs Int     @map("pending_jobs")
+  failedJobs  Int     @map("failed_jobs")
+  failedJobIds String @map("failed_job_ids")
+  options     String?
+  cancelledAt Int?    @map("cancelled_at")
+  createdAt   Int     @map("created_at")
+  finishedAt  Int?    @map("finished_at")
+
+  @@map("job_batches")
+}
+
+model FailedJob {
+  id         Int      @id @default(autoincrement())
+  uuid       String   @unique
+  connection String
+  queue      String
+  payload    String
+  exception  String
+  failedAt   DateTime @default(now()) @map("failed_at")
+
+  @@map("failed_jobs")
+}
+
+model MigrationRecord {
+  id        Int      @id @default(autoincrement())
+  migration String   @unique
+  batch     Int
+
+  @@map("migrations")
+}
+
+model PasswordResetToken {
+  email     String   @id
+  token     String
+  createdAt DateTime? @map("created_at")
+
+  @@map("password_reset_tokens")
+}
+
+model SessionRecord {
+  id           String @id
+  userId       Int?   @map("user_id")
+  ipAddress    String? @map("ip_address")
+  userAgent    String? @map("user_agent")
+  payload      String
+  lastActivity Int    @map("last_activity")
+
+  @@map("sessions")
+}

@@ -1,0 +1,13 @@
+{
+  "name": "the_box",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "web:dev": "npm --workspace @thebox/web run dev",
+    "web:build": "npm --workspace @thebox/web run build",
+    "api:dev": "npm --workspace @thebox/backend run start:dev",
+    "api:build": "npm --workspace @thebox/backend run build"
+  }
+}
