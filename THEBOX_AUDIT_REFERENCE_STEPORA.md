@@ -4,7 +4,7 @@
 **Date de révision** : 26 octobre 2026  
 **Version** : 2.0 — adaptation pour TheBox  
 **Projet source** : Stepora — Laravel 12, PHP, MySQL et PawaPay  
-**Projet cible** : TheBox — Node.js, NestJS, TypeScript, React, PostgreSQL  
+**Projet cible** : TheBox — Node.js, NestJS, TypeScript, React, PostgreSQL  et Pawapay
 **Statut** : document de référence pour la conception et le développement, pas preuve que chaque fonctionnalité source est opérationnelle.
 
 > **Décision de projet** : TheBox sera reconstruit dans une nouvelle base de code avec Node.js/NestJS pour le backend et React/TypeScript pour le frontend, en utilisant PostgreSQL. Le projet Stepora existant reste intact et sert de référence fonctionnelle, métier et visuelle. Ce document ne recommande donc plus de conserver Laravel comme cible.
