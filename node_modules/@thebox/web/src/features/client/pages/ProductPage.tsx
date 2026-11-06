@@ -1,11 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
-type ProductImage = {
-  id: string;
-  src: string;
-  alt: string;
-};
-
 type ProductPageInput = {
   id?: string | number;
   name?: string;
