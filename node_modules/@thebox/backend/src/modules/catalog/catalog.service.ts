@@ -1,5 +1,5 @@
-import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../../prisma/prisma.service';
+import { Injectable } from "@nestjs/common";
+import { PrismaService } from "../../prisma/prisma.service";
 
 @Injectable()
 export class CatalogService {
@@ -7,8 +7,12 @@ export class CatalogService {
 
   async getCategories() {
     const rows = await this.prisma.category.findMany({
-      include: { children: true },
-      orderBy: { name: 'asc' },
+      include: {
+        children: {
+          orderBy: [{ displayOrder: "asc" }, { name: "asc" }],
+        },
+      },
+      orderBy: [{ displayOrder: "asc" }, { name: "asc" }],
     });
 
     const categoryMap = new Map<number, any>();
@@ -56,7 +60,7 @@ export class CatalogService {
     const products = await this.prisma.product.findMany({
       where,
       include: { category: true },
-      orderBy: { createdAt: 'desc' },
+      orderBy: { createdAt: "desc" },
     });
 
     return {

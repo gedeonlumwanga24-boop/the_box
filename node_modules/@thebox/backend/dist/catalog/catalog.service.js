@@ -20,7 +20,7 @@ let CatalogService = class CatalogService {
     async getCategories() {
         const rows = await this.prisma.category.findMany({
             include: { children: true },
-            orderBy: { name: 'asc' },
+            orderBy: { name: "asc" },
         });
         const categoryMap = new Map();
         for (const row of rows) {
@@ -60,7 +60,7 @@ let CatalogService = class CatalogService {
         const items = await this.prisma.product.findMany({
             where,
             include: { category: true },
-            orderBy: { createdAt: 'desc' },
+            orderBy: { createdAt: "desc" },
         });
         return {
             data: items,

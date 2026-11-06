@@ -1,4 +1,4 @@
-import { AdminProductsService } from './admin-products.service';
+import { AdminProductsService } from "./admin-products.service";
 export declare class AdminProductsController {
     private readonly adminProductsService;
     constructor(adminProductsService: AdminProductsService);

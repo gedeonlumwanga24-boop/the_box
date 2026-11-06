@@ -1,4 +1,4 @@
-import { CatalogService } from './catalog.service';
+import { CatalogService } from "./catalog.service";
 export declare class CatalogController {
     private readonly catalogService;
     constructor(catalogService: CatalogService);
@@ -7,26 +7,26 @@ export declare class CatalogController {
         data: ({
             category: {
                 id: number;
+                parentId: number | null;
                 name: string;
                 slug: string;
+                displayOrder: number;
                 image: string | null;
                 createdAt: Date;
                 updatedAt: Date;
-                parentId: number | null;
-                displayOrder: number;
             };
         } & {
             id: number;
             name: string;
             slug: string;
+            image: string | null;
+            createdAt: Date;
+            updatedAt: Date;
             description: string | null;
             price: number;
             stock: number;
-            image: string | null;
             gallery: import("@prisma/client/runtime/library").JsonValue | null;
             categoryId: number;
-            createdAt: Date;
-            updatedAt: Date;
         })[];
         pagination: {
             total: number;

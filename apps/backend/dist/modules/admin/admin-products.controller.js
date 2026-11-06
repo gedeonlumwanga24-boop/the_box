@@ -26,7 +26,7 @@ let AdminProductsController = class AdminProductsController {
     create(body) {
         return this.adminProductsService.create({
             name: body.name,
-            category: body.category ?? 'Autre',
+            category: body.category ?? "Autre",
             price: Number(body.price ?? 0),
             stock: Number(body.stock ?? 0),
             description: body.description,
@@ -55,21 +55,21 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], AdminProductsController.prototype, "create", null);
 __decorate([
-    (0, common_1.Patch)(':id'),
-    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    (0, common_1.Patch)(":id"),
+    __param(0, (0, common_1.Param)("id", common_1.ParseIntPipe)),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number, Object]),
     __metadata("design:returntype", void 0)
 ], AdminProductsController.prototype, "update", null);
 __decorate([
-    (0, common_1.Delete)(':id'),
-    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    (0, common_1.Delete)(":id"),
+    __param(0, (0, common_1.Param)("id", common_1.ParseIntPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", void 0)
 ], AdminProductsController.prototype, "remove", null);
 exports.AdminProductsController = AdminProductsController = __decorate([
-    (0, common_1.Controller)('admin/products'),
+    (0, common_1.Controller)("admin/products"),
     __metadata("design:paramtypes", [admin_products_service_1.AdminProductsService])
 ], AdminProductsController);

@@ -1,5 +1,5 @@
-import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../../prisma/prisma.service';
+import { Injectable } from "@nestjs/common";
+import { PrismaService } from "../../prisma/prisma.service";
 
 @Injectable()
 export class AdminProductsService {
@@ -8,7 +8,7 @@ export class AdminProductsService {
   async findAll() {
     return this.prisma.product.findMany({
       include: { category: true },
-      orderBy: { createdAt: 'desc' },
+      orderBy: { createdAt: "desc" },
     });
   }
 
@@ -20,8 +20,8 @@ export class AdminProductsService {
     description?: string;
     imageUrl?: string;
   }) {
-    const categoryName = input.category?.trim() || 'Autre';
-    const categorySlug = this.slugify(categoryName) || 'autre';
+    const categoryName = input.category?.trim() || "Autre";
+    const categorySlug = this.slugify(categoryName) || "autre";
 
     let category = await this.prisma.category.findUnique({
       where: { slug: categorySlug },
@@ -36,7 +36,7 @@ export class AdminProductsService {
       });
     }
 
-    const name = input.name?.trim() || 'Produit sans nom';
+    const name = input.name?.trim() || "Produit sans nom";
 
     return this.prisma.product.create({
       data: {
@@ -69,11 +69,12 @@ export class AdminProductsService {
     });
 
     if (!current) {
-      throw new Error('Product not found');
+      throw new Error("Product not found");
     }
 
-    const categoryName = input.category?.trim() || current.category?.name || 'Autre';
-    const categorySlug = this.slugify(categoryName) || 'autre';
+    const categoryName =
+      input.category?.trim() || current.category?.name || "Autre";
+    const categorySlug = this.slugify(categoryName) || "autre";
 
     let category = await this.prisma.category.findUnique({
       where: { slug: categorySlug },
@@ -99,7 +100,9 @@ export class AdminProductsService {
         price: input.price !== undefined ? Number(input.price) : current.price,
         stock: input.stock !== undefined ? Number(input.stock) : current.stock,
         image:
-          input.imageUrl !== undefined ? input.imageUrl.trim() || null : current.image,
+          input.imageUrl !== undefined
+            ? input.imageUrl.trim() || null
+            : current.image,
         categoryId: category.id,
         slug:
           input.name && input.name.trim()
@@ -118,12 +121,12 @@ export class AdminProductsService {
   }
 
   private slugify(value: string) {
-    return (value || '')
+    return (value || "")
       .toLowerCase()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-+|-+$/g, '')
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "")
       .slice(0, 120);
   }
 }

@@ -7,10 +7,10 @@ import {
   ParseIntPipe,
   Patch,
   Post,
-} from '@nestjs/common';
-import { AdminProductsService } from './admin-products.service';
+} from "@nestjs/common";
+import { AdminProductsService } from "./admin-products.service";
 
-@Controller('admin/products')
+@Controller("admin/products")
 export class AdminProductsController {
   constructor(private readonly adminProductsService: AdminProductsService) {}
 
@@ -33,7 +33,7 @@ export class AdminProductsController {
   ) {
     return this.adminProductsService.create({
       name: body.name,
-      category: body.category ?? 'Autre',
+      category: body.category ?? "Autre",
       price: Number(body.price ?? 0),
       stock: Number(body.stock ?? 0),
       description: body.description,
@@ -41,9 +41,9 @@ export class AdminProductsController {
     });
   }
 
-  @Patch(':id')
+  @Patch(":id")
   update(
-    @Param('id', ParseIntPipe) id: number,
+    @Param("id", ParseIntPipe) id: number,
     @Body()
     body: {
       name?: string;
@@ -57,8 +57,8 @@ export class AdminProductsController {
     return this.adminProductsService.update(id, body);
   }
 
-  @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
+  @Delete(":id")
+  remove(@Param("id", ParseIntPipe) id: number) {
     return this.adminProductsService.remove(id);
   }
 }

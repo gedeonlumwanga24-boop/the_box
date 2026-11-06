@@ -20,12 +20,12 @@ let AdminProductsService = class AdminProductsService {
     async findAll() {
         return this.prisma.product.findMany({
             include: { category: true },
-            orderBy: { createdAt: 'desc' },
+            orderBy: { createdAt: "desc" },
         });
     }
     async create(input) {
-        const categoryName = input.category?.trim() || 'Autre';
-        const categorySlug = this.slugify(categoryName) || 'autre';
+        const categoryName = input.category?.trim() || "Autre";
+        const categorySlug = this.slugify(categoryName) || "autre";
         let category = await this.prisma.category.findUnique({
             where: { slug: categorySlug },
         });
@@ -37,7 +37,7 @@ let AdminProductsService = class AdminProductsService {
                 },
             });
         }
-        const name = input.name?.trim() || 'Produit sans nom';
+        const name = input.name?.trim() || "Produit sans nom";
         return this.prisma.product.create({
             data: {
                 name,
@@ -57,10 +57,10 @@ let AdminProductsService = class AdminProductsService {
             include: { category: true },
         });
         if (!current) {
-            throw new Error('Product not found');
+            throw new Error("Product not found");
         }
-        const categoryName = input.category?.trim() || current.category?.name || 'Autre';
-        const categorySlug = this.slugify(categoryName) || 'autre';
+        const categoryName = input.category?.trim() || current.category?.name || "Autre";
+        const categorySlug = this.slugify(categoryName) || "autre";
         let category = await this.prisma.category.findUnique({
             where: { slug: categorySlug },
         });
@@ -81,7 +81,9 @@ let AdminProductsService = class AdminProductsService {
                     : current.description,
                 price: input.price !== undefined ? Number(input.price) : current.price,
                 stock: input.stock !== undefined ? Number(input.stock) : current.stock,
-                image: input.imageUrl !== undefined ? input.imageUrl.trim() || null : current.image,
+                image: input.imageUrl !== undefined
+                    ? input.imageUrl.trim() || null
+                    : current.image,
                 categoryId: category.id,
                 slug: input.name && input.name.trim()
                     ? `${this.slugify(input.name)}-${id}`
@@ -97,12 +99,12 @@ let AdminProductsService = class AdminProductsService {
         });
     }
     slugify(value) {
-        return (value || '')
+        return (value || "")
             .toLowerCase()
-            .normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, '')
-            .replace(/[^a-z0-9]+/g, '-')
-            .replace(/^-+|-+$/g, '')
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/^-+|-+$/g, "")
             .slice(0, 120);
     }
 };

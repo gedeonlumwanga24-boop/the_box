@@ -29,20 +29,20 @@ let CatalogController = class CatalogController {
 };
 exports.CatalogController = CatalogController;
 __decorate([
-    (0, common_1.Get)('categories'),
+    (0, common_1.Get)("categories"),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], CatalogController.prototype, "getCategories", null);
 __decorate([
-    (0, common_1.Get)('products'),
-    __param(0, (0, common_1.Query)('category')),
-    __param(1, (0, common_1.Query)('q')),
+    (0, common_1.Get)("products"),
+    __param(0, (0, common_1.Query)("category")),
+    __param(1, (0, common_1.Query)("q")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, String]),
     __metadata("design:returntype", void 0)
 ], CatalogController.prototype, "getProducts", null);
 exports.CatalogController = CatalogController = __decorate([
-    (0, common_1.Controller)('catalog'),
+    (0, common_1.Controller)("catalog"),
     __metadata("design:paramtypes", [catalog_service_1.CatalogService])
 ], CatalogController);

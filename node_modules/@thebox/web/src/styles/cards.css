@@ -1,0 +1,215 @@
+/* Product card styles — pages hors catalogue */
+
+.catalog-main .product-card {
+    border: none;
+    box-shadow: none;
+}
+
+.product-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: all var(--duration-base) ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.product-card:hover {
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+    border-color: var(--color-text-light);
+}
+
+.product-card-image {
+    position: relative;
+    overflow: hidden;
+    background: var(--color-white);
+    height: 340px;
+}
+
+.product-card-image-link {
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+}
+
+.product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--duration-base) ease;
+}
+
+.product-card-image-link:hover .product-image {
+    transform: scale(1.06);
+}
+
+.product-card:hover .product-image {
+    transform: scale(1.05);
+}
+
+.badge {
+    position: absolute;
+    top: var(--spacing-md);
+    left: var(--spacing-md);
+    padding: var(--spacing-xs) var(--spacing-md);
+    background: var(--color-white);
+    color: var(--color-text);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-radius: var(--radius-full);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.badge-new {
+    background: var(--color-accent);
+    color: var(--color-white);
+}
+
+.product-card-body {
+    padding: var(--spacing-lg);
+    flex-grow: 1;
+
+    flex-direction: column;
+}
+
+.product-category {
+    margin: 0;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    font-weight: 500;
+}
+
+.product-name {
+    margin: 0.3rem 0 0.25rem;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--color-text);
+    letter-spacing: -0.005em;
+}
+
+.product-desc {
+    margin: 0 0 var(--spacing-lg);
+    font-size: 0.85rem;
+    color: var(--color-text-light);
+    line-height: 1.5;
+    flex-grow: 1;
+}
+
+.product-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-md);
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--color-border);
+}
+
+.price {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--color-accent);
+    letter-spacing: -0.01em;
+}
+
+.product-link {
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--color-text);
+    color: var(--color-white);
+    text-decoration: none;
+    border-radius: var(--radius-lg);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    transition: all var(--duration-base) ease;
+    border: 1px solid var(--color-text);
+}
+
+.product-link:hover {
+    background: var(--color-white);
+    color: var(--color-text);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.product-card-image {
+    position: relative;
+    background: #f3f4f6;
+    min-height: 280px;
+    overflow: hidden;
+}
+
+.product-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.35s ease;
+}
+
+.product-card:hover .product-card-image img {
+    transform: scale(1.03);
+}
+
+.badge-new {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    z-index: 1;
+    background: rgba(17, 24, 39, 0.9);
+    color: #ffffff;
+    padding: 0.45rem 0.8rem;
+    border-radius: 9999px;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.product-card-body {
+    padding: 1.1rem 1.5rem 0;
+}
+
+.product-category {
+    margin: 0 0 0.35rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #6b7280;
+}
+
+.product-desc {
+    margin: 0.65rem 0 0;
+    color: #4b5563;
+    line-height: 1.45;
+    font-size: 0.95rem;
+}
+
+.product-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.85rem;
+    padding: 1rem 0 0;
+    border-top: 1px solid #f3f4f6;
+}
+
+.product-link {
+    color: #111827;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+.product-link:hover {
+    text-decoration: underline;
+}

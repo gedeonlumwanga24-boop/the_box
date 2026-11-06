@@ -1,0 +1,553 @@
+
+
+.sidebar-form {
+    background: var(--color-white);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    border: 1px solid var(--color-border);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.filter-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding-bottom: var(--spacing-lg);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.filter-group:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.filter-label {
+    margin: 0;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-text);
+}
+
+.filter-group--categories {
+    max-height: 320px;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+}
+
+.filter-group--categories::-webkit-scrollbar {
+    width: 8px;
+}
+
+.filter-group--categories::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 999px;
+}
+
+.filter-group--categories::-webkit-scrollbar-thumb {
+    background: rgba(17, 24, 39, 0.18);
+    border-radius: 999px;
+}
+
+.filter-group--categories::-webkit-scrollbar-thumb:hover {
+    background: rgba(17, 24, 39, 0.28);
+}
+
+/* Radio buttons (Category, Size) */
+.filter-option,
+.filter-chip {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    transition: all var(--duration-base) ease;
+    padding: 0.45rem 0;
+}
+
+.filter-option input[type="radio"],
+.filter-chip input[type="radio"] {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--color-border);
+    border-radius: 50%;
+    background: var(--color-white);
+    cursor: pointer;
+    transition: all var(--duration-base) ease;
+    flex-shrink: 0;
+}
+
+.filter-option input[type="radio"]:hover,
+.filter-chip input[type="radio"]:hover {
+    border-color: var(--color-text);
+}
+
+.filter-option input[type="radio"]:checked,
+.filter-chip input[type="radio"]:checked {
+    background: var(--color-text);
+    border-color: var(--color-text);
+    box-shadow: inset 0 0 0 3px var(--color-white);
+}
+
+.filter-option span,
+.filter-chip span {
+    font-size: 0.95rem;
+    color: var(--color-text);
+    font-weight: 700;
+    transition: color var(--duration-base) ease;
+}
+
+.filter-option:hover span,
+.filter-chip:hover span {
+    color: #000000;
+}
+
+.filter-option--parent span {
+    font-weight: 800;
+}
+
+.filter-option--child {
+    margin-left: 1.7rem;
+    padding: 0.3rem 0;
+}
+
+.filter-option--child span {
+    color: #4b5563;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.filter-option input[type="radio"]:checked ~ span,
+.filter-chip input[type="radio"]:checked ~ span {
+    color: var(--color-text);
+    font-weight: 500;
+}
+
+/* Checkbox (Promotions) */
+.filter-option--checkbox input[type="checkbox"] {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--color-white);
+    cursor: pointer;
+    transition: all var(--duration-base) ease;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.filter-option--checkbox input[type="checkbox"]:hover {
+    border-color: var(--color-text);
+}
+
+.filter-option--checkbox input[type="checkbox"]:checked {
+    background: var(--color-text);
+    border-color: var(--color-text);
+}
+
+.filter-option--checkbox input[type="checkbox"]:checked::after {
+    content: "?";
+    color: var(--color-white);
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Price slider */
+.price-value {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: var(--spacing-sm);
+}
+
+.filter-range {
+    width: 100%;
+    height: 5px;
+    border-radius: 5px;
+    background: var(--color-border);
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.filter-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--color-text);
+    cursor: pointer;
+    transition: all var(--duration-base) ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.filter-range::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.filter-range::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--color-text);
+    cursor: pointer;
+    border: none;
+    transition: all var(--duration-base) ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.filter-range::-moz-range-thumb:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Size chips layout */
+.filter-tags {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-sm);
+}
+
+.filter-chip {
+    padding: var(--spacing-sm);
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-white);
+    transition: all var(--duration-base) ease;
+    justify-content: center;
+    text-align: center;
+}
+
+.filter-chip:hover {
+    border-color: var(--color-text);
+    background: var(--color-bg-light);
+}
+
+.filter-chip input[type="radio"]:checked ~ span {
+    font-weight: 600;
+}
+
+.filter-chip input[type="radio"]:checked {
+    border-color: var(--color-text) !important;
+}
+
+.filter-chip--all {
+    grid-column: span 2;
+}
+
+
+
+.sidebar-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.sidebar-header {
+    margin-bottom: 0.5rem;
+}
+
+.sidebar-title {
+    margin: 0 0 0.35rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #111827;
+}
+
+.sidebar-subtitle {
+    margin: 0;
+    color: #6b7280;
+    font-size: 0.95rem;
+    line-height: 1.7;
+}
+
+.filter-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 28px;
+    padding: 1.5rem;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.filter-group:not(:last-child) {
+    border-bottom: 1px solid #f3f4f6;
+    padding-bottom: 1.5rem;
+}
+
+.filter-label {
+    margin: 0;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: #111827;
+    font-weight: 700;
+}
+
+.filter-option {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    color: #111827;
+    font-size: 0.95rem;
+    font-weight: 700;
+    padding: 0.45rem 0;
+}
+
+.filter-option input {
+    width: 1rem;
+    height: 1rem;
+    accent-color: #111827;
+}
+
+.filter-tags {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+}
+
+.filter-chip {
+    display: block;
+    padding: 0;
+    border: none;
+    background: transparent;
+}
+
+.filter-chip span {
+    display: inline-flex;
+    width: 100%;
+    justify-content: center;
+    padding: 0.75rem 0.95rem;
+    border-radius: 9999px;
+    border: 1px solid #d1d5db;
+    background: #f9fafb;
+    color: #111827;
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+.filter-chip input {
+    display: none;
+}
+
+.filter-chip input:checked + span {
+    background: #111827;
+    color: #ffffff;
+    border-color: #111827;
+}
+
+.filter-chip--all {
+    opacity: 0.9;
+}
+
+.filter-range {
+    width: 100%;
+    accent-color: #111827;
+    margin-top: 0.5rem;
+}
+
+.price-value {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #111827;
+}
+
+/* Strong catalog filters panel */
+.catalog-sidebar .sidebar-form {
+    gap: 0;
+}
+
+.catalog-sidebar .filter-section {
+    position: relative;
+    gap: 1.35rem;
+    padding: 1.35rem;
+    background:
+        linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+    border: 2px solid #111827;
+    border-radius: 14px;
+    box-shadow:
+        0 18px 44px rgba(15, 23, 42, 0.14),
+        0 0 0 5px rgba(17, 24, 39, 0.04);
+    overflow: hidden;
+}
+
+.catalog-sidebar .filter-section::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: #111827;
+}
+
+.filter-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.65rem 0.8rem;
+    margin-top: 0.25rem;
+    background: #111827;
+    color: #ffffff;
+    border-radius: 10px;
+}
+
+.filter-panel-header span {
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #cbd5e1;
+}
+
+.filter-panel-header strong {
+    font-size: 1.05rem;
+    font-weight: 900;
+}
+
+.catalog-sidebar .filter-group {
+    gap: 0.55rem;
+    padding: 0 0 1.2rem;
+    border-bottom: 1.5px solid #dbe3ef;
+}
+
+.catalog-sidebar .filter-group:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+}
+
+.catalog-sidebar .filter-label {
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    margin: 0 0 0.25rem;
+    padding: 0.4rem 0.7rem;
+    border-radius: 999px;
+    background: #eef2ff;
+    color: #111827;
+    font-size: 0.78rem;
+    font-weight: 900;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.catalog-sidebar .filter-option {
+    min-height: 38px;
+    padding: 0.45rem 0.55rem;
+    border-radius: 10px;
+    background: #ffffff;
+    border: 1px solid transparent;
+    color: #111827;
+    transition:
+        background var(--duration-base) ease,
+        border-color var(--duration-base) ease,
+        transform var(--duration-base) ease;
+}
+
+.catalog-sidebar .filter-option:hover,
+.catalog-sidebar .filter-option:has(input:checked) {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+}
+
+.catalog-sidebar .filter-option:has(input:checked) {
+    box-shadow: inset 4px 0 0 #111827;
+}
+
+.catalog-sidebar .filter-option input {
+    width: 1.05rem;
+    height: 1.05rem;
+    accent-color: #111827;
+}
+
+.catalog-sidebar .filter-option span {
+    color: #111827;
+    font-size: 0.95rem;
+    font-weight: 760;
+}
+
+.catalog-sidebar .filter-option--parent {
+    margin-top: 0.25rem;
+    background: #111827;
+    border-color: #111827;
+}
+
+.catalog-sidebar .filter-option--parent span {
+    color: #ffffff;
+    font-size: 0.95rem;
+    font-weight: 900;
+}
+
+.catalog-sidebar .filter-option--parent input {
+    accent-color: #ffffff;
+}
+
+.catalog-sidebar .filter-option--child {
+    margin-left: 0.8rem;
+    border-left: 3px solid #dbe3ef;
+    background: #ffffff;
+}
+
+.catalog-sidebar .filter-option--child span {
+    color: #374151;
+    font-size: 0.9rem;
+    font-weight: 680;
+}
+
+.catalog-sidebar .price-value {
+    width: fit-content;
+    padding: 0.55rem 0.8rem;
+    border-radius: 10px;
+    background: #111827;
+    color: #ffffff;
+    font-size: 1.05rem;
+    font-weight: 900;
+}
+
+.catalog-sidebar .filter-range {
+    height: 8px;
+    accent-color: #111827;
+}
+
+.catalog-sidebar .filter-chip span {
+    min-height: 42px;
+    align-items: center;
+    border: 1.5px solid #cbd5e1;
+    background: #ffffff;
+    color: #111827;
+    font-weight: 850;
+}
+
+.catalog-sidebar .filter-chip input:checked + span {
+    background: #111827;
+    border-color: #111827;
+    color: #ffffff;
+}
+
+.catalog-sidebar .filter-option--checkbox {
+    background: #fff7ed;
+    border-color: #fed7aa;
+}
