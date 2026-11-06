@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { cartStore, useCartCount } from "../cart-store";
 
 type ProductPageInput = {
   id?: string | number;
   name?: string;
+  slug?: string;
   category?: string | { name?: string; slug?: string; id?: string | number } | null;
   price?: number | string;
   stock?: number;
@@ -15,6 +17,7 @@ type ProductPageInput = {
 type ProductPageProps = {
   product?: ProductPageInput;
   parentCategoryName?: string;
+  onGoToCart?: () => void;
 };
 
 const fallbackImage =
@@ -68,7 +71,12 @@ const galleryEntryToUrl = (entry: unknown): string | null => {
   return null;
 };
 
-export function ProductPage({ product, parentCategoryName = "" }: ProductPageProps) {
+export function ProductPage({
+  product,
+  parentCategoryName = "",
+  onGoToCart,
+}: ProductPageProps) {
+  const cartCount = useCartCount();
   const name = product?.name ?? "Produit";
   const categoryName =
     typeof product?.category === "string"
@@ -175,7 +183,19 @@ export function ProductPage({ product, parentCategoryName = "" }: ProductPagePro
     return () => slider.removeEventListener("scroll", onScroll);
   }, [slides.length]);
 
-  const openDrawer = () => setDrawerOpen(true);
+  const openDrawer = () => {
+    cartStore.addItem({
+      productId: product?.id ?? name,
+      name,
+      slug: product?.slug,
+      price,
+      image: slides[activeIndex] ?? null,
+      category: categoryName,
+      size: selectedSize,
+      color: selectedColor,
+    });
+    setDrawerOpen(true);
+  };
   const closeDrawer = () => setDrawerOpen(false);
 
   const variant = [
@@ -467,8 +487,16 @@ export function ProductPage({ product, parentCategoryName = "" }: ProductPagePro
         </div>
 
         <div className="drawer-actions">
-          <a href="#" className="drawer-btn drawer-btn-outline" onClick={(event) => event.preventDefault()}>
-            Voir le panier (<span id="drawerCartCount">1</span>)
+          <a
+            href="#"
+            className="drawer-btn drawer-btn-outline"
+            onClick={(event) => {
+              event.preventDefault();
+              closeDrawer();
+              onGoToCart?.();
+            }}
+          >
+            Voir le panier (<span id="drawerCartCount">{cartCount}</span>)
           </a>
           <a href="#" className="drawer-btn drawer-btn-solid" onClick={(event) => event.preventDefault()}>
             Paiement

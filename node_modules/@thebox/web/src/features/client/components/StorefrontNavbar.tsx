@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useCartCount } from "../cart-store";
 
 export type NavCategory = {
   id: string | number;
@@ -15,6 +16,8 @@ type StorefrontNavbarProps = {
   query: string;
   onSelectCategory: (slug?: string) => void;
   onSearch: (query: string) => void;
+  onNavigateHome?: () => void;
+  onGoToCart?: () => void;
 };
 
 const fallbackNavCategories: NavCategory[] = [
@@ -121,7 +124,10 @@ export function StorefrontNavbar({
   query,
   onSelectCategory,
   onSearch,
+  onNavigateHome,
+  onGoToCart,
 }: StorefrontNavbarProps) {
+  const cartCount = useCartCount();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
@@ -188,8 +194,12 @@ export function StorefrontNavbar({
               aria-label="The Box — accueil"
               onClick={(event) => {
                 event.preventDefault();
-                selectCategory(undefined);
-                onSearch("");
+                if (onNavigateHome) {
+                  onNavigateHome();
+                } else {
+                  selectCategory(undefined);
+                  onSearch("");
+                }
               }}
             >
               <img src="/logo.jpg" alt="The Box" />
@@ -331,9 +341,25 @@ export function StorefrontNavbar({
               <UserIcon />
             </a>
 
-            <a href="#" className="icon-btn icon-btn--pill nav-cart-btn" aria-label="Panier" id="navCartLink" onClick={(event) => event.preventDefault()}>
+            <a
+              href="#"
+              className="icon-btn icon-btn--pill nav-cart-btn"
+              aria-label="Panier"
+              id="navCartLink"
+              onClick={(event) => {
+                event.preventDefault();
+                onGoToCart?.();
+              }}
+            >
               <CartIcon />
-              <span className="cart-badge cart-badge--hidden" id="navCartBadge">0</span>
+              <span
+                className={
+                  cartCount > 0 ? "cart-badge" : "cart-badge cart-badge--hidden"
+                }
+                id="navCartBadge"
+              >
+                {cartCount > 9 ? "9+" : cartCount}
+              </span>
             </a>
 
             <button
@@ -495,7 +521,14 @@ export function StorefrontNavbar({
               </svg>
               Aide
             </a>
-            <a href="#" className="mobile-bottom-link" onClick={(event) => event.preventDefault()}>
+            <a
+              href="#"
+              className="mobile-bottom-link"
+              onClick={(event) => {
+                event.preventDefault();
+                onGoToCart?.();
+              }}
+            >
               <CartIcon />
               Panier
             </a>

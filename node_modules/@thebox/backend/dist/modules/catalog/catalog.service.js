@@ -48,12 +48,31 @@ let CatalogService = class CatalogService {
     async getProducts(filters = {}) {
         const where = {};
         if (filters.category) {
-            where.category = {
-                OR: [
-                    { slug: filters.category },
-                    { children: { some: { slug: filters.category } } },
-                ],
-            };
+            const allCategories = await this.prisma.category.findMany({
+                select: { id: true, slug: true, parentId: true },
+            });
+            const slugToId = new Map(allCategories.map((c) => [c.slug, c.id]));
+            const childrenByParent = new Map();
+            for (const category of allCategories) {
+                if (category.parentId != null) {
+                    const siblings = childrenByParent.get(category.parentId) ?? [];
+                    siblings.push(category);
+                    childrenByParent.set(category.parentId, siblings);
+                }
+            }
+            const slugs = new Set([filters.category]);
+            const queue = [];
+            const rootId = slugToId.get(filters.category);
+            if (rootId != null)
+                queue.push(rootId);
+            while (queue.length > 0) {
+                const parentId = queue.pop();
+                for (const child of childrenByParent.get(parentId) ?? []) {
+                    slugs.add(child.slug);
+                    queue.push(child.id);
+                }
+            }
+            where.category = { slug: { in: [...slugs] } };
         }
         if (filters.q) {
             where.OR = [
