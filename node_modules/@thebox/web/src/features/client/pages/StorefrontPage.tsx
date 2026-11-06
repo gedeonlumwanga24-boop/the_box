@@ -5,6 +5,7 @@ import { HomePage } from "./HomePage";
 import { CatalogPage } from "./CatalogPage";
 import { ProductPage } from "./ProductPage";
 import { CartPage } from "./CartPage";
+import { AboutPage } from "./AboutPage";
 import { apiRequest } from "../../shared/api";
 import {
   buildCategoryParentNames,
@@ -15,7 +16,7 @@ import {
   type ProductItem,
 } from "../catalog-shared";
 
-type StorefrontView = "home" | "catalog" | "product" | "cart";
+type StorefrontView = "home" | "catalog" | "product" | "cart" | "about";
 
 export function StorefrontPage() {
   const [categories, setCategories] =
@@ -117,6 +118,12 @@ export function StorefrontPage() {
     window.scrollTo({ top: 0 });
   };
 
+  const handleGoToAbout = () => {
+    setSelectedProduct(null);
+    setView("about");
+    window.scrollTo({ top: 0 });
+  };
+
   const handleOpenProduct = (product: ProductItem) => {
     setSelectedProduct(product);
     setView("product");
@@ -132,6 +139,7 @@ export function StorefrontPage() {
         onSelectCategory={handleSelectCategory}
         onSearch={handleSearch}
         onNavigateHome={handleGoHome}
+        onNavigateAbout={handleGoToAbout}
         onGoToCart={handleGoToCart}
       />
 
@@ -157,6 +165,14 @@ export function StorefrontPage() {
       ) : view === "cart" ? (
         <>
           <CartPage onBackToCatalog={handleGoToCatalog} />
+          <SiteFooter
+            onSelectCategory={handleSelectCategory}
+            onSearch={handleSearch}
+          />
+        </>
+      ) : view === "about" ? (
+        <>
+          <AboutPage onGoToCatalog={handleGoToCatalog} />
           <SiteFooter
             onSelectCategory={handleSelectCategory}
             onSearch={handleSearch}

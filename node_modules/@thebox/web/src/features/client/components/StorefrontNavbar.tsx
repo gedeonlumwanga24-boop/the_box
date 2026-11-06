@@ -17,6 +17,7 @@ type StorefrontNavbarProps = {
   onSelectCategory: (slug?: string) => void;
   onSearch: (query: string) => void;
   onNavigateHome?: () => void;
+  onNavigateAbout?: () => void;
   onGoToCart?: () => void;
 };
 
@@ -125,6 +126,7 @@ export function StorefrontNavbar({
   onSelectCategory,
   onSearch,
   onNavigateHome,
+  onNavigateAbout,
   onGoToCart,
 }: StorefrontNavbarProps) {
   const cartCount = useCartCount();
@@ -291,7 +293,14 @@ export function StorefrontNavbar({
                 </div>
               );
             })}
-            <a href="#" className="nav-menu-trigger nav-link-simple" onClick={(event) => event.preventDefault()}>
+            <a
+              href="#"
+              className="nav-menu-trigger nav-link-simple"
+              onClick={(event) => {
+                event.preventDefault();
+                onNavigateAbout?.();
+              }}
+            >
               À propos
             </a>
           </div>
@@ -552,7 +561,14 @@ export function StorefrontNavbar({
               </svg>
               Contact
             </a>
-            <a href="#" className="mobile-bottom-link" onClick={(event) => event.preventDefault()}>
+            <a
+              href="#"
+              className="mobile-bottom-link"
+              onClick={(event) => {
+                event.preventDefault();
+                onNavigateAbout?.();
+              }}
+            >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <circle cx="12" cy="12" r="10" />
                 <line x1="12" y1="16" x2="12" y2="12" />

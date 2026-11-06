@@ -9,6 +9,7 @@ import "./styles/footer.css";
 import "./styles/product.css";
 import "./styles/home.css";
 import "./styles/home-premium.css";
+import "./styles/apropos.css";
 import "./index.css";
 import App from "./App.tsx";
 
