@@ -14,26 +14,38 @@ export class AdminProductsService {
 
   async create(input: {
     name: string;
-    category: string;
+    category?: string;
+    categoryId?: number;
     price: number;
     stock: number;
     description?: string;
     imageUrl?: string;
   }) {
-    const categoryName = input.category?.trim() || "Autre";
-    const categorySlug = this.slugify(categoryName) || "autre";
+    let category: { id: number } | null = null;
 
-    let category = await this.prisma.category.findUnique({
-      where: { slug: categorySlug },
-    });
+    if (input.categoryId != null) {
+      category = await this.prisma.category.findUnique({
+        where: { id: input.categoryId },
+        select: { id: true },
+      });
+    }
 
     if (!category) {
-      category = await this.prisma.category.create({
-        data: {
-          name: categoryName,
-          slug: categorySlug,
-        },
+      const categoryName = input.category?.trim() || "Autre";
+      const categorySlug = this.slugify(categoryName) || "autre";
+
+      category = await this.prisma.category.findUnique({
+        where: { slug: categorySlug },
       });
+
+      if (!category) {
+        category = await this.prisma.category.create({
+          data: {
+            name: categoryName,
+            slug: categorySlug,
+          },
+        });
+      }
     }
 
     const name = input.name?.trim() || "Produit sans nom";
@@ -57,6 +69,7 @@ export class AdminProductsService {
     input: {
       name?: string;
       category?: string;
+      categoryId?: number;
       price?: number;
       stock?: number;
       description?: string;
@@ -72,21 +85,32 @@ export class AdminProductsService {
       throw new Error("Product not found");
     }
 
-    const categoryName =
-      input.category?.trim() || current.category?.name || "Autre";
-    const categorySlug = this.slugify(categoryName) || "autre";
+    let category: { id: number } | null = null;
 
-    let category = await this.prisma.category.findUnique({
-      where: { slug: categorySlug },
-    });
+    if (input.categoryId != null) {
+      category = await this.prisma.category.findUnique({
+        where: { id: input.categoryId },
+        select: { id: true },
+      });
+    }
 
     if (!category) {
-      category = await this.prisma.category.create({
-        data: {
-          name: categoryName,
-          slug: categorySlug,
-        },
+      const categoryName =
+        input.category?.trim() || current.category?.name || "Autre";
+      const categorySlug = this.slugify(categoryName) || "autre";
+
+      category = await this.prisma.category.findUnique({
+        where: { slug: categorySlug },
       });
+
+      if (!category) {
+        category = await this.prisma.category.create({
+          data: {
+            name: categoryName,
+            slug: categorySlug,
+          },
+        });
+      }
     }
 
     return this.prisma.product.update({

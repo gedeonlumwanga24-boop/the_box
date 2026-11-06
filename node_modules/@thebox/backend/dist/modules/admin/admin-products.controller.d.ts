@@ -33,6 +33,7 @@ export declare class AdminProductsController {
         stock?: number;
         description?: string;
         imageUrl?: string;
+        categoryId?: number;
     }): Promise<{
         category: {
             id: number;
@@ -64,6 +65,7 @@ export declare class AdminProductsController {
         stock?: number;
         description?: string;
         imageUrl?: string;
+        categoryId?: number;
     }): Promise<{
         category: {
             id: number;

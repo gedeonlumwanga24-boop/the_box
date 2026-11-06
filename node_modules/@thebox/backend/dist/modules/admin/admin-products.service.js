@@ -24,18 +24,27 @@ let AdminProductsService = class AdminProductsService {
         });
     }
     async create(input) {
-        const categoryName = input.category?.trim() || "Autre";
-        const categorySlug = this.slugify(categoryName) || "autre";
-        let category = await this.prisma.category.findUnique({
-            where: { slug: categorySlug },
-        });
-        if (!category) {
-            category = await this.prisma.category.create({
-                data: {
-                    name: categoryName,
-                    slug: categorySlug,
-                },
+        let category = null;
+        if (input.categoryId != null) {
+            category = await this.prisma.category.findUnique({
+                where: { id: input.categoryId },
+                select: { id: true },
             });
+        }
+        if (!category) {
+            const categoryName = input.category?.trim() || "Autre";
+            const categorySlug = this.slugify(categoryName) || "autre";
+            category = await this.prisma.category.findUnique({
+                where: { slug: categorySlug },
+            });
+            if (!category) {
+                category = await this.prisma.category.create({
+                    data: {
+                        name: categoryName,
+                        slug: categorySlug,
+                    },
+                });
+            }
         }
         const name = input.name?.trim() || "Produit sans nom";
         return this.prisma.product.create({
@@ -59,18 +68,27 @@ let AdminProductsService = class AdminProductsService {
         if (!current) {
             throw new Error("Product not found");
         }
-        const categoryName = input.category?.trim() || current.category?.name || "Autre";
-        const categorySlug = this.slugify(categoryName) || "autre";
-        let category = await this.prisma.category.findUnique({
-            where: { slug: categorySlug },
-        });
-        if (!category) {
-            category = await this.prisma.category.create({
-                data: {
-                    name: categoryName,
-                    slug: categorySlug,
-                },
+        let category = null;
+        if (input.categoryId != null) {
+            category = await this.prisma.category.findUnique({
+                where: { id: input.categoryId },
+                select: { id: true },
             });
+        }
+        if (!category) {
+            const categoryName = input.category?.trim() || current.category?.name || "Autre";
+            const categorySlug = this.slugify(categoryName) || "autre";
+            category = await this.prisma.category.findUnique({
+                where: { slug: categorySlug },
+            });
+            if (!category) {
+                category = await this.prisma.category.create({
+                    data: {
+                        name: categoryName,
+                        slug: categorySlug,
+                    },
+                });
+            }
         }
         return this.prisma.product.update({
             where: { id },

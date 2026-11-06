@@ -27,6 +27,7 @@ let AdminProductsController = class AdminProductsController {
         return this.adminProductsService.create({
             name: body.name,
             category: body.category ?? "Autre",
+            categoryId: body.categoryId != null ? Number(body.categoryId) : undefined,
             price: Number(body.price ?? 0),
             stock: Number(body.stock ?? 0),
             description: body.description,
@@ -34,7 +35,10 @@ let AdminProductsController = class AdminProductsController {
         });
     }
     update(id, body) {
-        return this.adminProductsService.update(id, body);
+        return this.adminProductsService.update(id, {
+            ...body,
+            categoryId: body.categoryId != null ? Number(body.categoryId) : undefined,
+        });
     }
     remove(id) {
         return this.adminProductsService.remove(id);

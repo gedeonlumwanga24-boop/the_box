@@ -29,11 +29,13 @@ export class AdminProductsController {
       stock?: number;
       description?: string;
       imageUrl?: string;
+      categoryId?: number;
     },
   ) {
     return this.adminProductsService.create({
       name: body.name,
       category: body.category ?? "Autre",
+      categoryId: body.categoryId != null ? Number(body.categoryId) : undefined,
       price: Number(body.price ?? 0),
       stock: Number(body.stock ?? 0),
       description: body.description,
@@ -52,9 +54,13 @@ export class AdminProductsController {
       stock?: number;
       description?: string;
       imageUrl?: string;
+      categoryId?: number;
     },
   ) {
-    return this.adminProductsService.update(id, body);
+    return this.adminProductsService.update(id, {
+      ...body,
+      categoryId: body.categoryId != null ? Number(body.categoryId) : undefined,
+    });
   }
 
   @Delete(":id")

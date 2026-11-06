@@ -11,13 +11,37 @@ const common_1 = require("@nestjs/common");
 const prisma_module_1 = require("../../prisma/prisma.module");
 const admin_products_controller_1 = require("./admin-products.controller");
 const admin_products_service_1 = require("./admin-products.service");
+const admin_dashboard_controller_1 = require("./admin-dashboard.controller");
+const admin_dashboard_service_1 = require("./admin-dashboard.service");
+const admin_categories_controller_1 = require("./admin-categories.controller");
+const admin_categories_service_1 = require("./admin-categories.service");
+const admin_orders_controller_1 = require("./admin-orders.controller");
+const admin_orders_service_1 = require("./admin-orders.service");
+const admin_clients_controller_1 = require("./admin-clients.controller");
+const admin_clients_service_1 = require("./admin-clients.service");
+const admin_messages_controller_1 = require("./admin-messages.controller");
+const admin_messages_service_1 = require("./admin-messages.service");
 let AdminModule = class AdminModule {
 };
 exports.AdminModule = AdminModule;
 exports.AdminModule = AdminModule = __decorate([
     (0, common_1.Module)({
         imports: [prisma_module_1.PrismaModule],
-        controllers: [admin_products_controller_1.AdminProductsController],
-        providers: [admin_products_service_1.AdminProductsService],
+        controllers: [
+            admin_products_controller_1.AdminProductsController,
+            admin_dashboard_controller_1.AdminDashboardController,
+            admin_categories_controller_1.AdminCategoriesController,
+            admin_orders_controller_1.AdminOrdersController,
+            admin_clients_controller_1.AdminClientsController,
+            admin_messages_controller_1.AdminMessagesController,
+        ],
+        providers: [
+            admin_products_service_1.AdminProductsService,
+            admin_dashboard_service_1.AdminDashboardService,
+            admin_categories_service_1.AdminCategoriesService,
+            admin_orders_service_1.AdminOrdersService,
+            admin_clients_service_1.AdminClientsService,
+            admin_messages_service_1.AdminMessagesService,
+        ],
     })
 ], AdminModule);

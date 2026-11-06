@@ -28,7 +28,8 @@ export declare class AdminProductsService {
     })[]>;
     create(input: {
         name: string;
-        category: string;
+        category?: string;
+        categoryId?: number;
         price: number;
         stock: number;
         description?: string;
@@ -60,6 +61,7 @@ export declare class AdminProductsService {
     update(id: number, input: {
         name?: string;
         category?: string;
+        categoryId?: number;
         price?: number;
         stock?: number;
         description?: string;

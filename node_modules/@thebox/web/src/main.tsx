@@ -10,6 +10,8 @@ import "./styles/product.css";
 import "./styles/home.css";
 import "./styles/home-premium.css";
 import "./styles/apropos.css";
+import "./styles/compte.css";
+import "./styles/admin.css";
 import "./index.css";
 import App from "./App.tsx";
 

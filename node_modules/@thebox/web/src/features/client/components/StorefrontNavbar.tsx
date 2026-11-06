@@ -18,6 +18,8 @@ type StorefrontNavbarProps = {
   onSearch: (query: string) => void;
   onNavigateHome?: () => void;
   onNavigateAbout?: () => void;
+  onNavigateAccount?: () => void;
+  onNavigateMessages?: () => void;
   onGoToCart?: () => void;
 };
 
@@ -127,6 +129,8 @@ export function StorefrontNavbar({
   onSearch,
   onNavigateHome,
   onNavigateAbout,
+  onNavigateAccount,
+  onNavigateMessages,
   onGoToCart,
 }: StorefrontNavbarProps) {
   const cartCount = useCartCount();
@@ -339,14 +343,31 @@ export function StorefrontNavbar({
               <SearchIcon />
             </button>
 
-            <a href="#" className="icon-btn icon-btn--pill" aria-label="Messagerie" onClick={(event) => event.preventDefault()}>
+            <a
+              href="#"
+              className="icon-btn icon-btn--pill"
+              aria-label="Messagerie"
+              onClick={(event) => {
+                event.preventDefault();
+                onNavigateMessages?.();
+              }}
+            >
               <MessageIcon />
               <span className="account-badge account-badge--hidden" id="navMessageBadge" style={{ backgroundColor: "#dc2626" }}>
                 0
               </span>
             </a>
 
-            <a href="#" className="icon-btn icon-btn--pill nav-account-btn" aria-label="Compte" id="navAccountLink" onClick={(event) => event.preventDefault()}>
+            <a
+              href="#"
+              className="icon-btn icon-btn--pill nav-account-btn"
+              aria-label="Compte"
+              id="navAccountLink"
+              onClick={(event) => {
+                event.preventDefault();
+                onNavigateAccount?.();
+              }}
+            >
               <UserIcon />
             </a>
 
@@ -541,11 +562,25 @@ export function StorefrontNavbar({
               <CartIcon />
               Panier
             </a>
-            <a href="#" className="mobile-bottom-link" onClick={(event) => event.preventDefault()}>
+            <a
+              href="#"
+              className="mobile-bottom-link"
+              onClick={(event) => {
+                event.preventDefault();
+                onNavigateMessages?.();
+              }}
+            >
               <MessageIcon />
               Messagerie
             </a>
-            <a href="#" className="mobile-bottom-link" onClick={(event) => event.preventDefault()}>
+            <a
+              href="#"
+              className="mobile-bottom-link"
+              onClick={(event) => {
+                event.preventDefault();
+                onNavigateAccount?.();
+              }}
+            >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden="true">
                 <rect x="3" y="4" width="18" height="18" rx="2" />
                 <line x1="16" y1="2" x2="16" y2="6" />

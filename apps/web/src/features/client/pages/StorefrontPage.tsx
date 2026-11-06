@@ -6,6 +6,9 @@ import { CatalogPage } from "./CatalogPage";
 import { ProductPage } from "./ProductPage";
 import { CartPage } from "./CartPage";
 import { AboutPage } from "./AboutPage";
+import { AccountPage } from "./AccountPage";
+import { AccountEditPage } from "./AccountEditPage";
+import { MessagesPage } from "./MessagesPage";
 import { apiRequest } from "../../shared/api";
 import {
   buildCategoryParentNames,
@@ -16,7 +19,15 @@ import {
   type ProductItem,
 } from "../catalog-shared";
 
-type StorefrontView = "home" | "catalog" | "product" | "cart" | "about";
+type StorefrontView =
+  | "home"
+  | "catalog"
+  | "product"
+  | "cart"
+  | "about"
+  | "account"
+  | "account-edit"
+  | "messages";
 
 export function StorefrontPage() {
   const [categories, setCategories] =
@@ -124,6 +135,24 @@ export function StorefrontPage() {
     window.scrollTo({ top: 0 });
   };
 
+  const handleGoToAccount = () => {
+    setSelectedProduct(null);
+    setView("account");
+    window.scrollTo({ top: 0 });
+  };
+
+  const handleGoToAccountEdit = () => {
+    setSelectedProduct(null);
+    setView("account-edit");
+    window.scrollTo({ top: 0 });
+  };
+
+  const handleGoToMessages = () => {
+    setSelectedProduct(null);
+    setView("messages");
+    window.scrollTo({ top: 0 });
+  };
+
   const handleOpenProduct = (product: ProductItem) => {
     setSelectedProduct(product);
     setView("product");
@@ -140,6 +169,8 @@ export function StorefrontPage() {
         onSearch={handleSearch}
         onNavigateHome={handleGoHome}
         onNavigateAbout={handleGoToAbout}
+        onNavigateAccount={handleGoToAccount}
+        onNavigateMessages={handleGoToMessages}
         onGoToCart={handleGoToCart}
       />
 
@@ -165,6 +196,34 @@ export function StorefrontPage() {
       ) : view === "cart" ? (
         <>
           <CartPage onBackToCatalog={handleGoToCatalog} />
+          <SiteFooter
+            onSelectCategory={handleSelectCategory}
+            onSearch={handleSearch}
+          />
+        </>
+      ) : view === "account-edit" ? (
+        <>
+          <AccountEditPage onBackToAccount={handleGoToAccount} />
+          <SiteFooter
+            onSelectCategory={handleSelectCategory}
+            onSearch={handleSearch}
+          />
+        </>
+      ) : view === "account" ? (
+        <>
+          <AccountPage
+            onGoToCatalog={handleGoToCatalog}
+            onGoToMessages={handleGoToMessages}
+            onEditProfile={handleGoToAccountEdit}
+          />
+          <SiteFooter
+            onSelectCategory={handleSelectCategory}
+            onSearch={handleSearch}
+          />
+        </>
+      ) : view === "messages" ? (
+        <>
+          <MessagesPage onBackToAccount={handleGoToAccount} />
           <SiteFooter
             onSelectCategory={handleSelectCategory}
             onSearch={handleSearch}
