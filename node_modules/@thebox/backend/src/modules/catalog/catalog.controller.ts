@@ -14,4 +14,9 @@ export class CatalogController {
   getProducts(@Query("category") category?: string, @Query("q") q?: string) {
     return this.catalogService.getProducts({ category, q });
   }
+
+  @Get("config")
+  getConfig() {
+    return this.catalogService.getPublicConfig();
+  }
 }

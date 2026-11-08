@@ -12,17 +12,17 @@ export declare class AdminClientsService {
         createdAt: Date;
     }[]>;
     remove(id: number): Promise<{
+        role: string;
         id: number;
         name: string;
+        createdAt: Date;
+        updatedAt: Date;
         email: string;
         emailVerifiedAt: Date | null;
         password: string | null;
-        role: string;
         rememberToken: string | null;
         googleId: string | null;
         avatar: string | null;
         deletedAt: Date | null;
-        createdAt: Date;
-        updatedAt: Date;
     }>;
 }

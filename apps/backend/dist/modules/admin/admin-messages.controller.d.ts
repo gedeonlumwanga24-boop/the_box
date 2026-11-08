@@ -26,16 +26,16 @@ export declare class AdminMessagesController {
     reply(id: number, body: {
         reply?: string;
     }): Promise<{
+        message: string | null;
         id: number;
         name: string | null;
-        email: string | null;
         createdAt: Date;
         updatedAt: Date;
         userId: number | null;
-        message: string | null;
+        statut: string | null;
+        email: string | null;
         isAdmin: boolean | null;
         subject: string | null;
-        statut: string | null;
         status: string | null;
         adminNotes: string | null;
         readAt: Date | null;

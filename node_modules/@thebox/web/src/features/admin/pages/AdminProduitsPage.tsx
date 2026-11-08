@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { adminApi, type AdminCategory, type AdminProduct } from "../admin-api";
+import { useEffect, useRef, useState } from "react";
+import { adminApi, resolveMedia, type AdminCategory, type AdminProduct } from "../admin-api";
 
 const fallbackImage =
   "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=100&q=80";
@@ -35,6 +35,8 @@ export function AdminProduitsPage({ onChanged }: AdminProduitsPageProps) {
   const [editing, setEditing] = useState<AdminProduct | "new" | null>(null);
   const [form, setForm] = useState<ProductForm>(emptyForm);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const load = async () => {
     setLoading(true);
@@ -105,6 +107,21 @@ export function AdminProduitsPage({ onChanged }: AdminProduitsPageProps) {
       setError(err instanceof Error ? err.message : "Erreur lors de l'enregistrement");
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleFile = async (file: File | undefined) => {
+    if (!file) return;
+    setUploading(true);
+    setError(null);
+    try {
+      const path = await adminApi.upload(file);
+      setForm((current) => ({ ...current, imageUrl: path }));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Échec de l'upload");
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
     }
   };
 
@@ -220,19 +237,47 @@ export function AdminProduitsPage({ onChanged }: AdminProduitsPageProps) {
 
             <div className="admin-form-group">
               <label className="admin-label" htmlFor="p-image">
-                Image (URL)
+                Image du produit
               </label>
+              {form.imageUrl && (
+                <img
+                  src={resolveMedia(form.imageUrl)}
+                  alt="Aperçu"
+                  style={{
+                    width: "100%",
+                    maxHeight: 200,
+                    objectFit: "cover",
+                    borderRadius: 8,
+                    border: "1px solid var(--admin-border)",
+                    marginBottom: "0.75rem",
+                  }}
+                  onError={(e) => {
+                    e.currentTarget.style.display = "none";
+                  }}
+                />
+              )}
               <input
+                ref={fileInputRef}
                 id="p-image"
+                type="file"
+                className="admin-input"
+                accept="image/*"
+                disabled={uploading}
+                onChange={(e) => void handleFile(e.target.files?.[0])}
+              />
+              <p style={{ fontSize: "0.8rem", color: "#6b7280", marginTop: "0.5rem" }}>
+                {uploading
+                  ? "Upload en cours..."
+                  : "Choisissez une image depuis votre ordinateur."}
+              </p>
+              <input
                 type="url"
                 className="admin-input"
-                placeholder="https://..."
-                value={form.imageUrl}
+                style={{ marginTop: "0.5rem" }}
+                placeholder="…ou collez une URL d'image"
+                value={form.imageUrl.startsWith("/") ? "" : form.imageUrl}
                 onChange={(e) => setForm({ ...form, imageUrl: e.target.value })}
               />
-              <small style={{ color: "#6b7280" }}>
-                L'envoi de fichier n'est pas encore branché — collez une URL d'image.
-              </small>
             </div>
 
             <button
@@ -296,7 +341,7 @@ export function AdminProduitsPage({ onChanged }: AdminProduitsPageProps) {
                 <tr key={product.id}>
                   <td>
                     <img
-                      src={product.image || fallbackImage}
+                      src={resolveMedia(product.image) || fallbackImage}
                       alt={product.name}
                       style={{ width: 50, height: 50, objectFit: "cover", borderRadius: 6 }}
                       onError={(e) => {

@@ -12,6 +12,9 @@ import { AdminClientsController } from "./admin-clients.controller";
 import { AdminClientsService } from "./admin-clients.service";
 import { AdminMessagesController } from "./admin-messages.controller";
 import { AdminMessagesService } from "./admin-messages.service";
+import { AdminConfigController } from "./admin-config.controller";
+import { AdminConfigService } from "./admin-config.service";
+import { AdminUploadController } from "./admin-upload.controller";
 
 @Module({
   imports: [PrismaModule],
@@ -22,6 +25,8 @@ import { AdminMessagesService } from "./admin-messages.service";
     AdminOrdersController,
     AdminClientsController,
     AdminMessagesController,
+    AdminConfigController,
+    AdminUploadController,
   ],
   providers: [
     AdminProductsService,
@@ -30,6 +35,7 @@ import { AdminMessagesService } from "./admin-messages.service";
     AdminOrdersService,
     AdminClientsService,
     AdminMessagesService,
+    AdminConfigService,
   ],
 })
 export class AdminModule {}

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef } from "react";
 import type { CategoryNode } from "../catalog-shared";
+import { useSiteConfig } from "../site-config";
 
 type HomePageProps = {
   categories: CategoryNode[];
@@ -7,7 +8,7 @@ type HomePageProps = {
   onGoToCatalog: () => void;
 };
 
-const heroImage =
+const heroImageFallback =
   "https://images.unsplash.com/photo-1552346154-21d32810baa3?q=80&w=2000&auto=format&fit=crop";
 
 const videoBannerFallback =
@@ -62,8 +63,23 @@ export function HomePage({
   onSelectCategory,
   onGoToCatalog,
 }: HomePageProps) {
+  const configs = useSiteConfig();
   const rootRef = useRef<HTMLDivElement | null>(null);
   const iconicSliderRef = useRef<HTMLDivElement | null>(null);
+
+  const heroImage = configs.hero_image || heroImageFallback;
+  const heroVideo = configs.hero_video || null;
+  const heroTagline = (
+    configs.hero_tagline || "Nouvelle Collection"
+  ).toUpperCase();
+  const heroTitleRaw = configs.hero_title || "L'élégance\nà chaque pas.";
+  const heroTitleLines = heroTitleRaw.toUpperCase().split("\n");
+
+  const trendingVideo = configs.trending_video || null;
+  const trendingTagline =
+    configs.trending_tagline || "Les essentiels de la saison";
+  const trendingTitleRaw = configs.trending_title || "Pour ceux\nqui bougent.";
+  const trendingTitleLines = trendingTitleRaw.split("\n");
 
   const subcategories = useMemo(
     () =>
@@ -100,19 +116,35 @@ export function HomePage({
       {/* ═══════════ HERO ═══════════ */}
       <section className="hero-section">
         <div className="hero-media">
-          <img
-            src={heroImage}
-            alt="The Box"
-            className="hero-bg animate-zoom"
-          />
+          {heroVideo ? (
+            <video
+              className="hero-bg hero-bg-video animate-zoom"
+              autoPlay
+              muted
+              loop
+              playsInline
+              poster={heroImage}
+            >
+              <source src={heroVideo} type="video/mp4" />
+            </video>
+          ) : (
+            <img
+              src={heroImage}
+              alt="The Box"
+              className="hero-bg animate-zoom"
+            />
+          )}
         </div>
         <div className="hero-overlay" />
         <div className="hero-content">
-          <p className="hero-tagline animate-fade-in">
-            {"NOUVELLE COLLECTION"}
-          </p>
+          <p className="hero-tagline animate-fade-in">{heroTagline}</p>
           <h1 className="hero-title animate-slide-up">
-            {"L'ÉLÉGANCE À CHAQUE PAS."}
+            {heroTitleLines.map((line, index) => (
+              <span key={index}>
+                {index > 0 && <br />}
+                {line}
+              </span>
+            ))}
           </h1>
           <p className="hero-desc animate-fade-in-delay">
             Découvrez notre sélection de sneakers premium. Authenticité
@@ -201,20 +233,34 @@ export function HomePage({
       {/* ═══════════ VIDEO BANNER ═══════════ */}
       <section className="video-banner-section reveal">
         <div className="video-banner-media">
-          <img
-            src={videoBannerFallback}
-            alt="Tendances The Box"
-            className="video-banner-video"
-            style={{ objectFit: "cover" }}
-          />
+          {trendingVideo ? (
+            <video
+              src={trendingVideo}
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="video-banner-video"
+            />
+          ) : (
+            <img
+              src={videoBannerFallback}
+              alt="Tendances The Box"
+              className="video-banner-video"
+              style={{ objectFit: "cover" }}
+            />
+          )}
           <div className="video-banner-overlay" />
         </div>
         <div className="video-banner-content">
-          <p className="video-banner-tagline">Les essentiels de la saison</p>
+          <p className="video-banner-tagline">{trendingTagline}</p>
           <h2 className="video-banner-title">
-            Pour ceux
-            <br />
-            qui bougent.
+            {trendingTitleLines.map((line, index) => (
+              <span key={index}>
+                {index > 0 && <br />}
+                {line}
+              </span>
+            ))}
           </h2>
           <button
             type="button"

@@ -2,6 +2,8 @@ export const apiBase = (
   import.meta.env.VITE_API_URL ?? "http://localhost:3001/api/v1"
 ).replace(/\/$/, "");
 
+export const apiOrigin = apiBase.replace(/\/api\/v1\/?$/, "");
+
 export async function apiRequest<T>(
   path: string,
   init: RequestInit = {},

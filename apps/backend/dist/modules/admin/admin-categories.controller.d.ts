@@ -20,13 +20,13 @@ export declare class AdminCategoriesController {
         image?: string | null;
     }): Promise<{
         id: number;
-        parentId: number | null;
         name: string;
         slug: string;
-        displayOrder: number;
         image: string | null;
         createdAt: Date;
         updatedAt: Date;
+        parentId: number | null;
+        displayOrder: number;
     }>;
     update(id: number, body: {
         name?: string;
@@ -36,22 +36,22 @@ export declare class AdminCategoriesController {
         image?: string | null;
     }): Promise<{
         id: number;
-        parentId: number | null;
         name: string;
         slug: string;
-        displayOrder: number;
         image: string | null;
         createdAt: Date;
         updatedAt: Date;
+        parentId: number | null;
+        displayOrder: number;
     }>;
     remove(id: number): Promise<{
         id: number;
-        parentId: number | null;
         name: string;
         slug: string;
-        displayOrder: number;
         image: string | null;
         createdAt: Date;
         updatedAt: Date;
+        parentId: number | null;
+        displayOrder: number;
     }>;
 }

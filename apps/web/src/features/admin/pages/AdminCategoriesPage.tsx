@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { adminApi, type AdminCategory } from "../admin-api";
+import { useEffect, useRef, useState } from "react";
+import { adminApi, resolveMedia, type AdminCategory } from "../admin-api";
 
 type AdminCategoriesPageProps = {
   onChanged: () => void;
@@ -29,6 +29,8 @@ export function AdminCategoriesPage({ onChanged }: AdminCategoriesPageProps) {
   const [editing, setEditing] = useState<AdminCategory | "new" | null>(null);
   const [form, setForm] = useState<CategoryForm>(emptyForm);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const load = async () => {
     setLoading(true);
@@ -94,6 +96,21 @@ export function AdminCategoriesPage({ onChanged }: AdminCategoriesPageProps) {
       setError(err instanceof Error ? err.message : "Erreur lors de l'enregistrement");
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleFile = async (file: File | undefined) => {
+    if (!file) return;
+    setUploading(true);
+    setError(null);
+    try {
+      const path = await adminApi.upload(file);
+      setForm((current) => ({ ...current, image: path }));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Échec de l'upload");
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
     }
   };
 
@@ -180,13 +197,42 @@ export function AdminCategoriesPage({ onChanged }: AdminCategoriesPageProps) {
                 />
               </div>
               <div className="admin-form-group">
-                <label className="admin-label" htmlFor="c-image">Image (URL)</label>
+                <label className="admin-label" htmlFor="c-image">Image</label>
+                {form.image && (
+                  <img
+                    src={resolveMedia(form.image)}
+                    alt="Aperçu"
+                    style={{
+                      width: "100%",
+                      maxHeight: 160,
+                      objectFit: "cover",
+                      borderRadius: 8,
+                      border: "1px solid var(--admin-border)",
+                      marginBottom: "0.75rem",
+                    }}
+                    onError={(e) => {
+                      e.currentTarget.style.display = "none";
+                    }}
+                  />
+                )}
                 <input
+                  ref={fileInputRef}
                   id="c-image"
+                  type="file"
+                  className="admin-input"
+                  accept="image/*"
+                  disabled={uploading}
+                  onChange={(e) => void handleFile(e.target.files?.[0])}
+                />
+                <p style={{ fontSize: "0.8rem", color: "#6b7280", marginTop: "0.4rem" }}>
+                  {uploading ? "Upload en cours..." : "Depuis votre ordinateur."}
+                </p>
+                <input
                   type="url"
                   className="admin-input"
-                  placeholder="https://..."
-                  value={form.image}
+                  style={{ marginTop: "0.5rem" }}
+                  placeholder="…ou une URL d'image"
+                  value={form.image.startsWith("/") ? "" : form.image}
                   onChange={(e) => setForm({ ...form, image: e.target.value })}
                 />
               </div>
@@ -252,7 +298,7 @@ export function AdminCategoriesPage({ onChanged }: AdminCategoriesPageProps) {
                   <td>
                     {category.image ? (
                       <img
-                        src={category.image}
+                        src={resolveMedia(category.image)}
                         alt=""
                         style={{ width: 50, height: 50, objectFit: "cover", borderRadius: 4 }}
                       />

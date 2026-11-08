@@ -6,6 +6,7 @@ import { AdminCategoriesPage } from "./pages/AdminCategoriesPage";
 import { AdminCommandesPage } from "./pages/AdminCommandesPage";
 import { AdminClientsPage } from "./pages/AdminClientsPage";
 import { AdminMessagesPage } from "./pages/AdminMessagesPage";
+import { AdminConfigPage } from "./pages/AdminConfigPage";
 import { AdminPlaceholderPage } from "./pages/AdminPlaceholderPage";
 
 export type AdminView =
@@ -42,7 +43,9 @@ type AdminAppProps = {
 export function AdminApp({ onExit }: AdminAppProps) {
   const [view, setView] = useState<AdminView>("dashboard");
   const [collapsed, setCollapsed] = useState(
-    () => window.localStorage.getItem("admin-sidebar-collapsed") === "true",
+    () =>
+      window.localStorage.getItem("admin-sidebar-collapsed") === "true" ||
+      window.innerWidth < 900,
   );
   const [pendingPayments, setPendingPayments] = useState(0);
   const [unreadMessages, setUnreadMessages] = useState(0);
@@ -159,6 +162,8 @@ export function AdminApp({ onExit }: AdminAppProps) {
         return <AdminClientsPage key={refreshKey} onChanged={refresh} />;
       case "messages":
         return <AdminMessagesPage key={refreshKey} onChanged={refresh} />;
+      case "config":
+        return <AdminConfigPage />;
       default:
         return <AdminPlaceholderPage title={viewTitles[view]} />;
     }

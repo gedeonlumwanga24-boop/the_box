@@ -1,4 +1,13 @@
 import type { NavCategory } from "./components/StorefrontNavbar";
+import { apiOrigin } from "../shared/api";
+
+export const resolveMediaUrl = (src?: string | null): string => {
+  if (!src) return "";
+  if (src.startsWith("http://") || src.startsWith("https://")) return src;
+  if (src.startsWith("/")) return `${apiOrigin}${src}`;
+  if (src.startsWith("uploads/")) return `${apiOrigin}/${src}`;
+  return src;
+};
 
 export const defaultProductImage =
   "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=900&q=80";
@@ -151,19 +160,22 @@ export const SIZE_OPTIONS = [
 export const productPrice = (product: ProductItem) => Number(product.price ?? 0);
 
 export const productImage = (product: ProductItem) => {
-  if (product.image) return product.image;
-  if (product.imageUrl) return product.imageUrl;
-  if (Array.isArray(product.gallery) && product.gallery.length > 0) {
-    const first = product.gallery[0];
-    if (typeof first === "string") return first;
-    if (first && typeof first === "object" && "src" in first) {
-      return String((first as { src?: string }).src ?? defaultProductImage);
+  const raw = (() => {
+    if (product.image) return product.image;
+    if (product.imageUrl) return product.imageUrl;
+    if (Array.isArray(product.gallery) && product.gallery.length > 0) {
+      const first = product.gallery[0];
+      if (typeof first === "string") return first;
+      if (first && typeof first === "object" && "src" in first) {
+        return String((first as { src?: string }).src ?? defaultProductImage);
+      }
+      if (first && typeof first === "object" && "url" in first) {
+        return String((first as { url?: string }).url ?? defaultProductImage);
+      }
     }
-    if (first && typeof first === "object" && "url" in first) {
-      return String((first as { url?: string }).url ?? defaultProductImage);
-    }
-  }
-  return defaultProductImage;
+    return defaultProductImage;
+  })();
+  return resolveMediaUrl(raw) || defaultProductImage;
 };
 
 export const isRecentProduct = (product: ProductItem) => {
@@ -193,7 +205,11 @@ export const buildCategoryTree = (categories: CategoryNode[]): CategoryNode[] =>
   const collect = (items: CategoryNode[]) => {
     items.forEach((item) => {
       if (!nodes.has(String(item.id))) {
-        nodes.set(String(item.id), { ...item, children: [] });
+        nodes.set(String(item.id), {
+          ...item,
+          image: item.image ? resolveMediaUrl(item.image) : item.image,
+          children: [],
+        });
       }
       if (item.children?.length) collect(item.children);
     });

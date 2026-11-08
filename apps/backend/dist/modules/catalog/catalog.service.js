@@ -92,6 +92,27 @@ let CatalogService = class CatalogService {
             },
         };
     }
+    async getPublicConfig() {
+        const rows = await this.prisma.siteConfig.findMany({
+            where: {
+                key: {
+                    startsWith: "hero_",
+                },
+            },
+        });
+        const trending = await this.prisma.siteConfig.findMany({
+            where: { key: { startsWith: "trending_" } },
+        });
+        const about = await this.prisma.siteConfig.findMany({
+            where: { key: { startsWith: "about_" } },
+        });
+        const configs = {};
+        for (const row of [...rows, ...trending, ...about]) {
+            if (row.value != null)
+                configs[row.key] = row.value;
+        }
+        return configs;
+    }
 };
 exports.CatalogService = CatalogService;
 exports.CatalogService = CatalogService = __decorate([

@@ -1,4 +1,12 @@
-import { apiRequest } from "../shared/api";
+import { apiRequest, apiOrigin } from "../shared/api";
+
+export const resolveMedia = (src?: string | null): string => {
+  if (!src) return "";
+  if (src.startsWith("http://") || src.startsWith("https://")) return src;
+  if (src.startsWith("/")) return `${apiOrigin}${src}`;
+  if (src.startsWith("uploads/")) return `${apiOrigin}/${src}`;
+  return src;
+};
 
 export type AdminProduct = {
   id: number;
@@ -97,6 +105,16 @@ export type DashboardData = {
 };
 
 export const adminApi = {
+  upload: async (file: File): Promise<string> => {
+    const form = new FormData();
+    form.append("file", file);
+    const res = await apiRequest<{ path: string }>("/admin/upload", {
+      method: "POST",
+      body: form,
+    });
+    return res.path;
+  },
+
   dashboard: () => apiRequest<DashboardData>("/admin/dashboard"),
 
   products: {
@@ -140,6 +158,15 @@ export const adminApi = {
     list: () => apiRequest<AdminClient[]>("/admin/clients"),
     remove: (id: number) =>
       apiRequest(`/admin/clients/${id}`, { method: "DELETE" }),
+  },
+
+  config: {
+    get: () => apiRequest<Record<string, string>>("/admin/config"),
+    update: (values: Record<string, string | null>) =>
+      apiRequest<Record<string, string>>("/admin/config", {
+        method: "PUT",
+        body: JSON.stringify(values),
+      }),
   },
 
   messages: {

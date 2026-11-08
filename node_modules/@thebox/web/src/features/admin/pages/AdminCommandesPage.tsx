@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { adminApi, type AdminOrder } from "../admin-api";
+import { adminApi, resolveMedia, type AdminOrder } from "../admin-api";
 
 const fallbackImage =
   "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=100&q=80";
@@ -158,7 +158,7 @@ export function AdminCommandesPage({ pendingOnly, onChanged }: AdminCommandesPag
                   <tr key={item.productId}>
                     <td>
                       <img
-                        src={item.image || fallbackImage}
+                        src={resolveMedia(item.image) || fallbackImage}
                         alt={item.name}
                         style={{ width: 44, height: 44, objectFit: "cover", borderRadius: 6 }}
                         onError={(e) => {

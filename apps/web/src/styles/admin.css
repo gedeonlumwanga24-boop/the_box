@@ -3,7 +3,7 @@
    ========================================================================== */
 
 :root {
-    --admin-sidebar-bg: #111827;
+    --admin-sidebar-bg: #312e81;
     --admin-sidebar-color: #f3f4f6;
     --admin-sidebar-width: 250px;
     --admin-topbar-height: 60px;
@@ -73,13 +73,13 @@
 
 .admin-nav-item:hover {
     color: #ffffff;
-    background-color: rgba(255,255,255,0.05);
+    background-color: rgba(255,255,255,0.08);
 }
 
 .admin-nav-item.active {
     color: #ffffff;
-    background-color: rgba(255,255,255,0.1);
-    border-left-color: #facc15;
+    background-color: rgba(255,255,255,0.14);
+    border-left-color: #fb923c;
 }
 
 .admin-sidebar-footer {
@@ -432,4 +432,40 @@
 .admin-body.sidebar-collapsed .admin-logout-form button i {
     margin-right: 0 !important;
     font-size: 1.25rem;
+}
+
+/* ─── MOBILE : sidebar en overlay ─── */
+@media (max-width: 900px) {
+    .admin-main {
+        margin-left: 0 !important;
+    }
+
+    .admin-sidebar {
+        width: 270px;
+        transform: translateX(-105%);
+        transition: transform 0.3s ease;
+        box-shadow: none;
+    }
+
+    .admin-body:not(.sidebar-collapsed) .admin-sidebar {
+        transform: translateX(0);
+        box-shadow: 0 0 40px rgba(0, 0, 0, 0.45);
+    }
+
+    .admin-topbar {
+        padding: 0 1rem;
+    }
+
+    .admin-content {
+        padding: 1rem;
+    }
+
+    .admin-kpi-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .admin-card-header {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
 }

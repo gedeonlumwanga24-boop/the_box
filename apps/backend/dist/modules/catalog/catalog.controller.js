@@ -26,6 +26,9 @@ let CatalogController = class CatalogController {
     getProducts(category, q) {
         return this.catalogService.getProducts({ category, q });
     }
+    getConfig() {
+        return this.catalogService.getPublicConfig();
+    }
 };
 exports.CatalogController = CatalogController;
 __decorate([
@@ -42,6 +45,12 @@ __decorate([
     __metadata("design:paramtypes", [String, String]),
     __metadata("design:returntype", void 0)
 ], CatalogController.prototype, "getProducts", null);
+__decorate([
+    (0, common_1.Get)("config"),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], CatalogController.prototype, "getConfig", null);
 exports.CatalogController = CatalogController = __decorate([
     (0, common_1.Controller)("catalog"),
     __metadata("design:paramtypes", [catalog_service_1.CatalogService])

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { cartStore, useCartCount } from "../cart-store";
+import { resolveMediaUrl } from "../catalog-shared";
 
 type ProductPageInput = {
   id?: string | number;
@@ -92,11 +93,14 @@ export function ProductPage({
   const slides = useMemo(() => {
     const urls: string[] = [];
     const main = product?.image ?? product?.imageUrl ?? fallbackImage;
-    if (main) urls.push(main);
+    if (main) urls.push(resolveMediaUrl(main));
     if (Array.isArray(product?.gallery)) {
       product.gallery.forEach((entry) => {
         const url = galleryEntryToUrl(entry);
-        if (url && !urls.includes(url)) urls.push(url);
+        if (url) {
+          const resolved = resolveMediaUrl(url);
+          if (!urls.includes(resolved)) urls.push(resolved);
+        }
       });
     }
     return urls.length > 0 ? urls : [fallbackImage];

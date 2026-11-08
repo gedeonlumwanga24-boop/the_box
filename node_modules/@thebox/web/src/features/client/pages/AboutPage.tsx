@@ -1,16 +1,17 @@
 import { useEffect, useRef } from "react";
+import { useSiteConfig } from "../site-config";
 
 type AboutPageProps = {
   onGoToCatalog: () => void;
 };
 
-const heroImg =
+const heroImgFallback =
   "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1920&auto=format&fit=crop";
 
-const img1 =
+const img1Fallback =
   "https://images.unsplash.com/photo-1552346154-21d32810baa3?q=80&w=900&auto=format&fit=crop";
 
-const img2 =
+const img2Fallback =
   "https://images.unsplash.com/photo-1608231387042-66d1773070a5?q=80&w=700&auto=format&fit=crop";
 
 const stats = [
@@ -46,7 +47,12 @@ const brands = [
 ];
 
 export function AboutPage({ onGoToCatalog }: AboutPageProps) {
+  const configs = useSiteConfig();
   const rootRef = useRef<HTMLDivElement | null>(null);
+
+  const heroImg = configs.about_hero_image || heroImgFallback;
+  const img1 = configs.about_image_1 || img1Fallback;
+  const img2 = configs.about_image_2 || img2Fallback;
 
   useEffect(() => {
     const root = rootRef.current;
